@@ -1,6 +1,6 @@
 using System;
 
-namespace ProEventos.API.Infra.Models
+namespace ProEventos.API.Infra.Entities
 {
     public class Evento
     {

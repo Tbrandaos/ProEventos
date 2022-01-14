@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ProEventos.API.Infra.Models;
+using ProEventos.API.Domain.Dtos;
 
 namespace ProEventos.API.Controllers
 {
@@ -17,9 +17,9 @@ namespace ProEventos.API.Controllers
         }
 
         [HttpGet]
-        public Evento Get()
+        public EventoDto Get()
         {
-            var evento = new Evento()
+            var evento = new EventoDto()
             {
                 Id = 1,
                 Local = "Rio de Janeiro",
