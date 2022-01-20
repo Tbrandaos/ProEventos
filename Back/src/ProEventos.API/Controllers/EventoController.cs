@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using ProEventos.API.Domain.Dtos;
+using ProEventos.API.Domain.Response;
+using ProEventos.API.Domain.Services;
 
 namespace ProEventos.API.Controllers
 {
@@ -12,24 +10,24 @@ namespace ProEventos.API.Controllers
     [Route("api/[controller]")]
     public class EventoController : ControllerBase
     {
-        public EventoController()
+        private readonly IEventoService _service;
+        public EventoController(IEventoService service)
         {
+            _service = service;
         }
 
         [HttpGet]
-        public EventoDto Get()
+        public async Task<IActionResult> Get()
         {
-            var evento = new EventoDto()
-            {
-                Id = 1,
-                Local = "Rio de Janeiro",
-                DataEvento = DateTime.Now.AddDays(2),
-                Tema = "Angular 11 e .Net 5",
-                QuantidadePessoas = 250,
-                Lote = "Primeiro Lote",
-                UrlImagem = ""
-            };
-            return evento;
+            var eventos = await _service.GetAll();
+            return Ok(eventos);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var evento = await _service.GetById(id);
+            return Ok(evento);
         }
     }
 }
