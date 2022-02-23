@@ -8,10 +8,10 @@ namespace ProEventos.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class EventoController : ControllerBase
+    public class EventosController : ControllerBase
     {
         private readonly IEventoService _service;
-        public EventoController(IEventoService service)
+        public EventosController(IEventoService service)
         {
             _service = service;
         }
