@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using ProEventos.API.Domain.Response;
-using ProEventos.API.Domain.Services;
+using ProEventos.Domain.Response;
+using ProEventos.Domain.Services;
 
 namespace ProEventos.API.Controllers
 {
@@ -19,14 +19,14 @@ namespace ProEventos.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var eventos = await _service.GetAll();
+            var eventos = await _service.GetAll(false);
             return Ok(eventos);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var evento = await _service.GetById(id);
+            var evento = await _service.GetById(id, false);
             return Ok(evento);
         }
     }

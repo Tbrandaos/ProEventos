@@ -4,10 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using ProEventos.API.Domain.Response;
-using ProEventos.API.Domain.Services;
+using ProEventos.Domain.Response.Evento;
+using ProEventos.Domain.Services;
 
-namespace ProEventos.API.Infra.Services
+namespace ProEventos.Infra.Services
 {
     public class EventoService : IEventoService
     {
@@ -20,7 +20,7 @@ namespace ProEventos.API.Infra.Services
            _mapper = mapper;
        }
 
-        public async Task<IEnumerable<GetEventoResponse>> GetAll()
+        public async Task<IEnumerable<GetEventoResponse>> GetAll(bool includePalestrante)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace ProEventos.API.Infra.Services
             }
         }
 
-        public async Task<GetEventoResponse> GetById(int id)
+        public async Task<GetEventoResponse> GetById(int id,bool includePalestrante)
         {
             try
             {
@@ -48,6 +48,12 @@ namespace ProEventos.API.Infra.Services
             {
                 throw new Exception(ex.Message);
             }       
+        }
+
+        public async Task<IEnumerable<GetEventoResponse>> GetByTema(string tema, bool includePalestrantes)
+        {
+            var eventos = await _context.Eventos.Where(a => a.Tema == tema).ToListAsync();
+            return _mapper.Map<List<GetEventoResponse>>(eventos);
         }
     }
 }

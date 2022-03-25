@@ -4,13 +4,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using ProEventos.API.Infra;
 using Microsoft.EntityFrameworkCore;
-using ProEventos.API.Infra.Entities;
-using ProEventos.API.Domain.Response;
+using ProEventos.Domain.Response.Evento;
+using ProEventos.Domain.Response.Palestrante;
 using AutoMapper;
-using ProEventos.API.Domain.Services;
-using ProEventos.API.Infra.Services;
+using ProEventos.Domain.Services;
+using ProEventos.Infra;
+using ProEventos.Infra.Entities;
+using ProEventos.Infra.Services;
 
 namespace ProEventos.API
 {
@@ -39,11 +40,13 @@ namespace ProEventos.API
             var config = new AutoMapper.MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<GetEventoResponse, Evento>().ReverseMap();
+                cfg.CreateMap<GetPalestranteResponse, Palestrante>().ReverseMap();
             });
             IMapper mapper = config.CreateMapper();
             services.AddSingleton(mapper);
 
             services.AddScoped<IEventoService, EventoService>();
+            services.AddScoped<IPalestranteService, PalestranteService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
