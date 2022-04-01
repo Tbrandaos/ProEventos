@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
+using ProEventos.Domain.Request.Evento;
 using ProEventos.Domain.Response.Evento;
 using ProEventos.Domain.Response.Palestrante;
 using AutoMapper;
@@ -12,6 +13,7 @@ using ProEventos.Domain.Services;
 using ProEventos.Infra;
 using ProEventos.Infra.Entities;
 using ProEventos.Infra.Services;
+using ProEventos.Application.Dependencies;
 
 namespace ProEventos.API
 {
@@ -37,10 +39,18 @@ namespace ProEventos.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProEventos.API", Version = "v1" });
             });
 
+            services.RegisterRequestHandlers();
+
             var config = new AutoMapper.MapperConfiguration(cfg =>
             {
+                #region Eventos
                 cfg.CreateMap<GetEventoResponse, Evento>().ReverseMap();
+                cfg.CreateMap<AddEventoRequest, Evento>().ReverseMap();
+                #endregion
+
+                #region Palestrantes
                 cfg.CreateMap<GetPalestranteResponse, Palestrante>().ReverseMap();
+                #endregion
             });
             IMapper mapper = config.CreateMapper();
             services.AddSingleton(mapper);

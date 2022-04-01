@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using ProEventos.Domain.Response;
+using ProEventos.Domain.Request.Evento;
 using ProEventos.Domain.Services;
+using MediatR;
 
 namespace ProEventos.API.Controllers
 {
@@ -10,10 +11,19 @@ namespace ProEventos.API.Controllers
     [Route("api/[controller]")]
     public class EventosController : ControllerBase
     {
+        private readonly IMediator _mediator;
         private readonly IEventoService _service;
-        public EventosController(IEventoService service)
+        public EventosController(IEventoService service, IMediator mediator)
         {
+            _mediator = mediator;
             _service = service;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] AddEventoRequest request)
+        {
+            var eventoId = await _mediator.Send(request);
+            return Ok(eventoId);
         }
 
         [HttpGet]

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using ProEventos.Domain.Response.Evento;
 using ProEventos.Domain.Response.Palestrante;
 using ProEventos.Domain.Services;
+using ProEventos.Infra.Entities;
 
 namespace ProEventos.Infra.Services
 {
@@ -21,11 +22,23 @@ namespace ProEventos.Infra.Services
            _mapper = mapper;
        }
 
-        public async Task<IEnumerable<GetPalestranteResponse>> GetAll(bool includeEvento)
+        public async Task<IEnumerable<GetPalestranteResponse>> GetAll(bool includeEvento = false)
         {
             try
             {
-                var palestrantes = await _context.Palestrantes.ToListAsync();
+                 IQueryable<Palestrante> query = _context.Palestrantes
+                    .Include(a => a.RedesSociais);
+
+                if(includeEvento)
+                {
+                    query = query
+                        .Include(a => a.PalestrantesEventos)
+                        .ThenInclude(pa => pa.Evento);
+                }
+                    
+                query = query.OrderBy(a => a.Id);
+
+                var palestrantes = await query.ToListAsync();
                 return _mapper.Map<List<GetPalestranteResponse>>(palestrantes);
             }
             catch (Exception ex)
@@ -34,11 +47,25 @@ namespace ProEventos.Infra.Services
             }
         }
 
-        public async Task<GetPalestranteResponse> GetById(int id, bool includeEvento)
+        public async Task<GetPalestranteResponse> GetById(int id, bool includeEvento = false)
         {
             try
             {
-                var palestrante =  await _context.Palestrantes.FirstOrDefaultAsync(b => b.Id == id);
+                IQueryable<Palestrante> query = _context.Palestrantes
+                    .Include(a => a.RedesSociais);
+
+                if(includeEvento)
+                {
+                    query = query
+                        .Include(a => a.RedesSociais)
+                        .ThenInclude(pa => pa.Evento);
+                }
+                    
+                query = query
+                    .OrderBy(a => a.Id)
+                    .Where(a => a.Id == id);
+
+                var palestrante = await query.FirstOrDefaultAsync();
                 
                 if(palestrante == null)
                     throw new Exception("Palestrante não encontrado para o Id: " + id);
@@ -51,9 +78,23 @@ namespace ProEventos.Infra.Services
             }   
         }
 
-        public async Task<IEnumerable<GetPalestranteResponse>> GetByNome(string nome, bool includeEvento)
+        public async Task<IEnumerable<GetPalestranteResponse>> GetByNome(string nome, bool includeEvento = false)
         {
-            var palestrantes = await _context.Palestrantes.Where(a => a.Nome == nome).ToListAsync();
+            IQueryable<Palestrante> query = _context.Palestrantes
+                    .Include(a => a.RedesSociais);
+
+            if(includeEvento)
+            {
+                query = query
+                    .Include(a => a.PalestrantesEventos)
+                    .ThenInclude(pa => pa.Evento);
+            }
+                    
+            query = query
+                .OrderBy(a => a.Id)
+                .Where(a => a.Nome.ToLower().Contains(nome.ToLower()));
+
+            var palestrantes = await query.ToListAsync();            
             return _mapper.Map<List<GetPalestranteResponse>>(palestrantes);
         }
     }
