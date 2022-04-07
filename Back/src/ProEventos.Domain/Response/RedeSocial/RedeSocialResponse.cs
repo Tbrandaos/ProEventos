@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ProEventos.Domain.Response.RedeSocial
 {
-    public class GetRedeSocialResponse
+    public class RedeSocialResponse
     {
         public int Id { get; set; }
         public string Nome { get; set; }

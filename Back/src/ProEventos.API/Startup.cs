@@ -10,10 +10,13 @@ using ProEventos.Domain.Response.Evento;
 using ProEventos.Domain.Response.Palestrante;
 using AutoMapper;
 using ProEventos.Domain.Services;
-using ProEventos.Infra;
 using ProEventos.Infra.Entities;
 using ProEventos.Infra.Services;
-using ProEventos.Application.Dependencies;
+using ProEventos.Infra.Context;
+using ProEventos.Domain.Request.Lote;
+using ProEventos.Domain.Response.Lote;
+using ProEventos.Domain.Response.RedeSocial;
+using ProEventos.Domain.Request.RedeSocial;
 
 namespace ProEventos.API
 {
@@ -32,24 +35,35 @@ namespace ProEventos.API
             services.AddDbContext<DataContext>(
                 context => context.UseSqlite(Configuration.GetConnectionString("Default"))
             );
-            services.AddControllers();
+            services.AddControllers()
+                .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = 
+                    Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                );
             services.AddCors();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProEventos.API", Version = "v1" });
             });
 
-            services.RegisterRequestHandlers();
-
             var config = new AutoMapper.MapperConfiguration(cfg =>
             {
                 #region Eventos
-                cfg.CreateMap<GetEventoResponse, Evento>().ReverseMap();
-                cfg.CreateMap<AddEventoRequest, Evento>().ReverseMap();
+                cfg.CreateMap<EventoResponse, Evento>().ReverseMap();
+                cfg.CreateMap<EventoRequest, Evento>().ReverseMap();
                 #endregion
 
                 #region Palestrantes
-                cfg.CreateMap<GetPalestranteResponse, Palestrante>().ReverseMap();
+                cfg.CreateMap<PalestranteResponse, Palestrante>().ReverseMap();
+                #endregion
+
+                #region Lotes
+                cfg.CreateMap<LoteRequest, Lote>().ReverseMap();
+                cfg.CreateMap<LoteResponse, Lote>().ReverseMap();
+                #endregion
+
+                #region RedesSociais
+                cfg.CreateMap<RedeSocialRequest, RedeSocial>().ReverseMap();
+                cfg.CreateMap<RedeSocialResponse, RedeSocial>().ReverseMap();
                 #endregion
             });
             IMapper mapper = config.CreateMapper();

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ProEventos.Infra.Entities;
 
-namespace ProEventos.Infra
+namespace ProEventos.Infra.Context
 {
     public class DataContext : DbContext
     {
@@ -20,6 +20,16 @@ namespace ProEventos.Infra
         protected override void OnModelCreating(ModelBuilder modelBuilder){
             modelBuilder.Entity<PalestranteEvento>()
                 .HasKey(a => new {a.EventoId, a.PalestranteId});
+
+            modelBuilder.Entity<Evento>()
+                .HasMany(e => e.RedesSociais)
+                .WithOne(e => e.Evento)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Palestrante>()
+                .HasMany(e => e.RedesSociais)
+                .WithOne(e => e.Palestrante)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
     }

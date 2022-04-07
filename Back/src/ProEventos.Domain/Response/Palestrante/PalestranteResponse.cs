@@ -4,7 +4,7 @@ using ProEventos.Domain.Response.RedeSocial;
 
 namespace ProEventos.Domain.Response.Palestrante
 {
-    public class GetPalestranteResponse
+    public class PalestranteResponse
     {
         public int Id { get; set; } 
        public string Nome { get; set; }
@@ -12,7 +12,7 @@ namespace ProEventos.Domain.Response.Palestrante
        public string ImagemUrl { get; set; }
        public string Telefone { get; set; }
        public string Email { get; set; }
-       public IList<GetRedeSocialResponse> RedesSociais { get; set; }
-       public IList<GetPalestranteEventoResponse> PalestrantesEventos { get; set; }
+       public IList<RedeSocialResponse> RedesSociais { get; set; }
+       public IList<PalestranteEventoResponse> PalestrantesEventos { get; set; }
     }
 }

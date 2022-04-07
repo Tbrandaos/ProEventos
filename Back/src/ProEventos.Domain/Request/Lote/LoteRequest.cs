@@ -1,8 +1,8 @@
-using System;
+﻿using System;
 
-namespace ProEventos.Domain.Response.Lote
+namespace ProEventos.Domain.Request.Lote
 {
-    public class GetLoteResponse
+    public class LoteRequest
     {
         public int Id { get; set; }
         public string Nome { get; set; }

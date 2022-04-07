@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ProEventos.Domain.Response.PalestranteEvento
 {
-    public class GetPalestranteEventoResponse
+    public class PalestranteEventoResponse
     {
         public int EventoId { get; set; }
         public int PalestranteId { get; set; }

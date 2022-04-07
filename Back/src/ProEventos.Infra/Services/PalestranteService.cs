@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using ProEventos.Domain.Response.Evento;
 using ProEventos.Domain.Response.Palestrante;
 using ProEventos.Domain.Services;
+using ProEventos.Infra.Context;
 using ProEventos.Infra.Entities;
 
 namespace ProEventos.Infra.Services
@@ -22,7 +22,19 @@ namespace ProEventos.Infra.Services
            _mapper = mapper;
        }
 
-        public async Task<IEnumerable<GetPalestranteResponse>> GetAll(bool includeEvento = false)
+       public async Task<int> SaveChangesAsync()
+        {
+            try
+            {
+                return await _context.SaveChangesAsync();
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);       
+            }   
+        }
+
+        public async Task<IEnumerable<PalestranteResponse>> GetAll(bool includeEvento = false)
         {
             try
             {
@@ -39,7 +51,7 @@ namespace ProEventos.Infra.Services
                 query = query.OrderBy(a => a.Id);
 
                 var palestrantes = await query.ToListAsync();
-                return _mapper.Map<List<GetPalestranteResponse>>(palestrantes);
+                return _mapper.Map<List<PalestranteResponse>>(palestrantes);
             }
             catch (Exception ex)
             {
@@ -47,7 +59,7 @@ namespace ProEventos.Infra.Services
             }
         }
 
-        public async Task<GetPalestranteResponse> GetById(int id, bool includeEvento = false)
+        public async Task<PalestranteResponse> GetById(int id, bool includeEvento = false)
         {
             try
             {
@@ -70,7 +82,7 @@ namespace ProEventos.Infra.Services
                 if(palestrante == null)
                     throw new Exception("Palestrante não encontrado para o Id: " + id);
 
-                return _mapper.Map<GetPalestranteResponse>(palestrante);
+                return _mapper.Map<PalestranteResponse>(palestrante);
             }
             catch (Exception ex)
             {
@@ -78,7 +90,7 @@ namespace ProEventos.Infra.Services
             }   
         }
 
-        public async Task<IEnumerable<GetPalestranteResponse>> GetByNome(string nome, bool includeEvento = false)
+        public async Task<IEnumerable<PalestranteResponse>> GetByNome(string nome, bool includeEvento = false)
         {
             IQueryable<Palestrante> query = _context.Palestrantes
                     .Include(a => a.RedesSociais);
@@ -95,7 +107,7 @@ namespace ProEventos.Infra.Services
                 .Where(a => a.Nome.ToLower().Contains(nome.ToLower()));
 
             var palestrantes = await query.ToListAsync();            
-            return _mapper.Map<List<GetPalestranteResponse>>(palestrantes);
+            return _mapper.Map<List<PalestranteResponse>>(palestrantes);
         }
     }
 }

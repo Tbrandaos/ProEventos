@@ -7,9 +7,11 @@ namespace ProEventos.Domain.Services
 {
     public interface IEventoService
     {
-        Task<AddEventoRequest> Create(AddEventoRequest request);
-        Task<IEnumerable<GetEventoResponse>> GetAll(bool includePalestrante);
-        Task<GetEventoResponse> GetById(int id, bool includePalestrante);
-        Task<IEnumerable<GetEventoResponse>> GetByTema(string tema, bool includePalestrante);
+        Task<EventoResponse> Create(EventoRequest request);
+        Task<EventoResponse> Update(EventoRequest request);
+        Task<int> Delete(int id);
+        Task<IEnumerable<EventoResponse>> GetAll(bool includePalestrante);
+        Task<EventoResponse> GetById(int id, bool includePalestrante);
+        Task<IEnumerable<EventoResponse>> GetByTema(string tema, bool includePalestrante);
     }
 }
