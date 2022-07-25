@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using ProEventos.Domain.Response.Lote;
 using ProEventos.Domain.Response.RedeSocial;
 using ProEventos.Domain.Response.PalestranteEvento;
+using System;
 
 namespace ProEventos.Domain.Response.Evento
 {
@@ -9,7 +10,7 @@ namespace ProEventos.Domain.Response.Evento
     {
         public int Id { get; set; }
         public string Local { get; set; }
-        public string DataEvento { get; set; }
+        public DateTime? DataEvento { get; set; }
         public string Tema { get; set; }
         public int QuantidadePessoas { get; set; }
         public string Lote { get; set; }
